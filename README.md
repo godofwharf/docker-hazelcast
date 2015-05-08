@@ -29,7 +29,17 @@ Deployment and clustering config examples.
     "HZ_GROUP_NAME": "mygroup",
     "HZ_GROUP_PASSWORD": "secret"
   },
-  "instances": 3
+  "instances": 3,
+  "healthChecks": [
+    {
+      "protocol": "TCP",
+      "portIndex": 0,
+      "gracePeriodSeconds": 15,
+      "intervalSeconds": 10,
+      "timeoutSeconds": 20,
+      "maxConsecutiveFailures": 3
+    }
+  ]
 }
 ```
 
