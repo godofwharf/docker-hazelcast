@@ -1,0 +1,13 @@
+<hazelcast>
+  <network>
+    <public-address>${hazelcast.network.public-address}</public-address>
+    <port auto-increment="true">${hazelcast.network.port}</port>
+    <join>
+      <multicast enabled="true"></multicast>
+    </join>
+  </network>
+  <group>
+    <name>${hazelcast.group.name}</name>
+    <password>${hazelcast.group.password}</password>
+  </group>  
+</hazelcast>
