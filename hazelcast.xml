@@ -1,7 +1,7 @@
 <hazelcast>
   <network>
     <public-address>${hazelcast.network.public-address}</public-address>
-    <port auto-increment="true">${hazelcast.network.port}</port>
+    <port auto-increment="false">${hazelcast.network.port}</port>
     <join>
       <multicast enabled="true"></multicast>
     </join>

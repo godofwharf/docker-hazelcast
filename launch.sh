@@ -1,9 +1,23 @@
 #!/bin/bash -x
 
-if [ "$HOST" != "" ] && [  "$PORT0" != "" ]; then
-	JAVA_OPTS="$JAVA_OPTS -Dhazelcast.network.public-address=$HOST:$PORT0 -Dhazelcast.network.port=$PORT0"
+# Evaluate variables in the value of HZ_* env vars
+for var in ${!HZ_@}; do
+	export ${var}="`eval echo -e ${!var}`"
+done
+
+# Default public port to same as bind port
+HZ_PUBLIC_PORT=${HZ_PUBLIC_PORT:-${HZ_PORT}}
+
+if [ "$HZ_PORT" != "" ]; then
+	JAVA_OPTS="$JAVA_OPTS -Dhazelcast.network.port=$HZ_PORT"
 else
-	JAVA_OPTS="$JAVA_OPTS -Dhazelcast.network.public-address -Dhazelcast.network.port"
+	JAVA_OPTS="$JAVA_OPTS -Dhazelcast.network.port"
+fi
+
+if [ "$HZ_PUBLIC_HOST" != "" ] && [ "$HZ_PUBLIC_PORT" != "" ]; then
+	JAVA_OPTS="$JAVA_OPTS -Dhazelcast.network.public-address=$HZ_PUBLIC_HOST:$HZ_PUBLIC_PORT"
+else
+	JAVA_OPTS="$JAVA_OPTS -Dhazelcast.network.public-address"
 fi
 
 if [ "$HZ_GROUP_NAME" != "" ]; then
@@ -12,9 +26,14 @@ else
 	JAVA_OPTS="$JAVA_OPTS -Dhazelcast.group.name -Dhazelcast.group.password"
 fi
 
+JAR="$HZ_HOME/hazelcast-all-$HZ_VERSION.jar"
+if [ ! -e "$JAR" ]; then
+	echo "Failed to find Hazelcast JAR file at $JAR"
+	exit 1
+fi
 
 echo
-echo JAVA_OPTS=$JAVA_OPTS
+echo java -cp $JAR $JAVA_OPTS com.hazelcast.core.server.StartServer
 echo
 
-exec java -server -cp $HZ_HOME/hazelcast-$HZ_VERSION.jar $JAVA_OPTS com.hazelcast.core.server.StartServer
+exec java -cp $JAR $JAVA_OPTS com.hazelcast.core.server.StartServer

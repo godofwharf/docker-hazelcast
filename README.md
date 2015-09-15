@@ -5,6 +5,9 @@ multicast to automatically form a cluster.
 ## Environment Variables
 The default parameters can be overridden by setting environment variables on the container using the **docker run -e** flag.
 
+ * **HZ_PORT** - Port to bind to.
+ * **HZ_PUBLIC_HOST** - Public hostname to advertise to the cluster.
+ * **HZ_PUBLIC_PORT** - Public port to advertise to the cluster. Defaults to $HZ_PORT
  * **HZ_GROUP_NAME** - Group name to avoid different clusters from joining each other.
  * **HZ_GROUP_PASSWORD** - Password required to join the cluster.
 
@@ -23,9 +26,11 @@ Deployment and clustering config examples.
     }
   },
   "ports": [
-    0
+    5701
   ],
   "env": {
+    "HZ_PORT": "${PORT_5701}",
+    "HZ_PUBLIC_HOST": "${HOST}",
     "HZ_GROUP_NAME": "mygroup",
     "HZ_GROUP_PASSWORD": "secret"
   },
