@@ -26,14 +26,20 @@ else
 	JAVA_OPTS="$JAVA_OPTS -Dhazelcast.group.name -Dhazelcast.group.password"
 fi
 
-JAR="$HZ_HOME/hazelcast-all-$HZ_VERSION.jar"
-if [ ! -e "$JAR" ]; then
-	echo "Failed to find Hazelcast JAR file at $JAR"
-	exit 1
+if [ "$HZ_ZK_URL" != "" ]; then
+	JAVA_OPTS="$JAVA_OPTS -Dhazelcast.zk.url=$HZ_ZK_URL"
+else
+	JAVA_OPTS="$JAVA_OPTS -Dhazelcast.zk.url"
 fi
 
+JAR="$HZ_HOME/hazelcast-all-$HZ_VERSION.jar:$HZ_HOME/hazelcast-zookeeper-3.7-SNAPSHOT.jar"
+#if [ ! -e "$JAR" ]; then
+#	echo "Failed to find Hazelcast JAR file at $JAR"
+#	exit 1
+#fi
+
 echo
-echo java -cp $JAR $JAVA_OPTS com.hazelcast.core.server.StartServer
+echo java -cp $JAR $JAVA_OPTS -Dhazelcast.config=$HZ_HOME/hazelcast.xml com.hazelcast.core.server.StartServer
 echo
 
-exec java -cp $JAR $JAVA_OPTS com.hazelcast.core.server.StartServer
+exec java -cp $JAR $JAVA_OPTS -Dhazelcast.config=$HZ_HOME/hazelcast.xml com.hazelcast.core.server.StartServer
