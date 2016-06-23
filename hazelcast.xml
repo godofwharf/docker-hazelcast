@@ -106,7 +106,7 @@
             then all entries of the map will be copied to another JVM for
             fail-safety. 0 means no backup.
         -->
-        <backup-count>1</backup-count>
+        <backup-count>2</backup-count>
         <!--
             Number of async backups. 0 means no backup.
         -->
@@ -117,7 +117,7 @@
 			will get automatically evicted from the map.
 			Any integer between 0 and Integer.MAX_VALUE. 0 means infinite. Default is 0.
 		-->
-        <time-to-live-seconds>0</time-to-live-seconds>
+        <time-to-live-seconds>36000</time-to-live-seconds>
         <!--
 			Maximum number of seconds for each entry to stay idle in the map. Entries that are
 			idle(not touched) for more than <max-idle-seconds> will get
@@ -132,14 +132,14 @@
             LFU (Least Frequently Used).
             NONE is the default.
         -->
-        <eviction-policy>NONE</eviction-policy>
+        <eviction-policy>LRU</eviction-policy>
         <!--
             Maximum size of the map. When max size is reached,
             map is evicted based on the policy defined.
             Any integer between 0 and Integer.MAX_VALUE. 0 means
             Integer.MAX_VALUE. Default is 0.
         -->
-        <max-size policy="PER_NODE">0</max-size>
+        <max-size policy="PER_NODE">1000000</max-size>
         <!--
             When max. size is reached, specified percentage of
             the map will be evicted. Any integer between 0 and 100.
